@@ -1,0 +1,41 @@
+name: Build editor's copy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the draft
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install renderers
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ietf-python"
+          "$RUNNER_TEMP/ietf-python/bin/python" -m pip install xml2rfc==3.35.0
+          gem install --no-document --user-install kramdown-rfc --version 1.7.43
+          echo "$RUNNER_TEMP/ietf-python/bin" >> "$GITHUB_PATH"
+          ruby -r rubygems -e 'puts File.join(Gem.user_dir, "bin")' >> "$GITHUB_PATH"
+
+      - name: Build and lint
+        run: make
+
+      - name: Save the editor's copy as a repository artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: editor-copy
+          path: |
+            draft-*.html
+            draft-*.txt
+          if-no-files-found: error
+          retention-days: 14

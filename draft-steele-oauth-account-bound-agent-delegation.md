@@ -1,8 +1,8 @@
 ---
 title: "Account-Linked Delegation for OAuth 2.0 Agents"
 abbrev: "Account-Linked Agent Delegation"
-docname: draft-steele-oauth-account-bound-agent-delegation-00
-date: 2026-11-19
+docname: draft-steele-oauth-account-bound-agent-delegation-latest
+date:
 v: 3
 category: std
 submissiontype: IETF
