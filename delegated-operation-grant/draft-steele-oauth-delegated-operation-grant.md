@@ -16,12 +16,17 @@ author:
 normative:
   RFC2119:
   RFC6749:
+  RFC7515:
   RFC7519:
   RFC7800:
   RFC8174:
+  RFC8414:
+  RFC8707:
   RFC8725:
   RFC9700:
 informative:
+  RFC6838:
+  I-D.ietf-oauth-identity-assertion-authz-grant:
   I-D.carleton-workload-authz-grant:
   I-D.rosomakho-oauth-txn-challenge:
 ...
@@ -84,16 +89,32 @@ appear in a redirect URL. This document defines no new OAuth response type.
 
 # Delegated Operation Grant
 
-The authorization server signs the DOG as a JWT ({{RFC7519}}). The JWT
-MUST contain the following claims.
+The DOG follows the JWT structure of the Identity Assertion JWT
+Authorization Grant (ID-JAG, {{I-D.ietf-oauth-identity-assertion-authz-grant}}).
+The authorization server that accepts the DOG for the service is the
+resource authorization server. It can also be the issuer of the DOG.
+
+The issuer MUST sign the JWT ({{RFC7519}}) and set the protected JOSE
+header parameter `typ` ({{RFC7515}}) to `oauth-dog+jwt`. This type is
+reserved for DOGs within this profile. A DOG requires a platform proof
+key, a single protected resource, and an explicit set of operations.
+It does not use the ID-JAG type or prescribe the ID-JAG exchange.
+
+The JWT MUST contain the following claims.
 
 * `iss` identifies the authorization server.
 * `sub` identifies the user within the issuer's namespace.
-* `aud` identifies the single service authorized to accept the grant.
-* `client_id` identifies the trusted platform's OAuth client at the issuer.
+* `aud` identifies the resource authorization server by its issuer
+  identifier ({{RFC8414}}), as a single string.
+* `resource` identifies the protected resource by a single absolute URI
+  without a fragment ({{RFC8707}}).
+* `client_id` identifies the trusted platform's OAuth client at the resource
+  authorization server. If the issuer uses a different client identifier,
+  it MUST verify the mapping before issuing the grant.
 * `cnf` identifies the platform's proof key ({{RFC7800}}).
 * `scope` lists the approved operations as space-delimited OAuth scope
   values understood by the service.
+* `iat` records the issuance time as a NumericDate.
 * `exp` sets the latest time at which the grant can be used.
 * `jti` identifies this grant instance for revocation.
 
@@ -107,10 +128,21 @@ A workload requests access for a task through the platform. The platform
 checks the request against the user's task and current policy. It MAY
 request fewer operations or a shorter lifetime than the DOG allows.
 
-Before granting access, the service MUST validate the signature, issuer,
-audience, required claims, expiry, and revocation status. It MUST apply
-validation rules that distinguish a DOG from other JWTs ({{RFC8725}}).
-It MUST verify fresh proof of possession of the platform key. The proof MUST
+The resource authorization server MUST reject a missing or incorrect
+`typ`, including `oauth-id-jag+jwt`. It MUST validate the signature using
+an allowed algorithm and a key associated with an issuer trusted to
+delegate access for this user, client, and resource ({{RFC8725}}).
+It MUST check all required claims and revocation status. It MUST reject
+an expired grant, an `exp` at or before `iat`, or an `iat` in the future
+beyond allowed clock skew.
+
+The server MUST compare `aud` to its issuer identifier and `resource` to
+the requested resource using exact string comparison. It MUST reject
+either mismatch and verify that `client_id` identifies the requesting
+platform. It MUST resolve the user in the issuer's namespace and restrict
+the resulting access to the named resource.
+
+The server MUST verify fresh proof of possession of the platform key. The proof MUST
 cover this grant, the intended workload, and the requested limits. The service MUST
 reject a replayed proof or a request whose limits it cannot enforce.
 
@@ -155,4 +187,20 @@ keys out of logs.
 
 # IANA Considerations
 
-This document requests no IANA actions.
+This document proposes registration of the media type
+`application/oauth-dog+jwt` under {{RFC6838}}.
+
+* Type and subtype names: application and oauth-dog+jwt.
+* Required and optional parameters: none.
+* Encoding considerations: binary.
+* Security and interoperability considerations: see the grant validation
+  and security requirements in this document.
+* Published specification: this document.
+* Applications: OAuth authorization servers and trusted platforms.
+* Additional information: no magic number, file extension, or Macintosh
+  file type code.
+* Contact: IETF OAuth Working Group.
+* Author: Nick Steele.
+* Intended usage: COMMON.
+* Restrictions on usage: none.
+* Change controller: IETF.
