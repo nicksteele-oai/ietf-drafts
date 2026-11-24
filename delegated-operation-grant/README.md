@@ -3,8 +3,8 @@
 This is an individual Internet-Draft proposal.
 It has not been submitted to the IETF.
 
-- [Read the editor's copy](https://nicksteele-oai.github.io/ietf-drafts/account-bound-agent-delegation/) · [Plain text](https://nicksteele-oai.github.io/ietf-drafts/account-bound-agent-delegation/draft-steele-oauth-account-bound-agent-delegation.txt)
-- [Editor's source](draft-steele-oauth-account-bound-agent-delegation.md)
+- [Read the editor's copy](https://nicksteele-oai.github.io/ietf-drafts/delegated-operation-grant/) · [Plain text](https://nicksteele-oai.github.io/ietf-drafts/delegated-operation-grant/draft-steele-oauth-delegated-operation-grant.txt)
+- [Editor's source](draft-steele-oauth-delegated-operation-grant.md)
 - [Design decisions](decision-log.md)
 - [Builds and rendered copies](https://github.com/nicksteele-oai/ietf-drafts/actions/workflows/build.yml)
 - [Contributing](CONTRIBUTING.md)

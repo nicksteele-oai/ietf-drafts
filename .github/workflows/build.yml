@@ -39,20 +39,26 @@ jobs:
         with:
           name: editor-copy
           path: |
-            account-bound-agent-delegation/draft-*.html
-            account-bound-agent-delegation/draft-*.txt
+            delegated-operation-grant/draft-*.html
+            delegated-operation-grant/draft-*.txt
           if-no-files-found: error
           retention-days: 14
 
       - name: Stage the public editor's copy
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
-          dir=account-bound-agent-delegation
-          draft=draft-steele-oauth-account-bound-agent-delegation
+          dir=delegated-operation-grant
+          draft=draft-steele-oauth-delegated-operation-grant
           mkdir -p "_site/$dir"
           cp "$dir/$draft.html" "_site/$dir/index.html"
           cp "$dir/$draft.txt" "_site/$dir/"
           cp .github/pages/index.html _site/
+
+          # Preserve previously published links.
+          old=account-bound-agent-delegation
+          mkdir -p "_site/$old"
+          cp .github/pages/redirect.html "_site/$old/index.html"
+          cp "$dir/$draft.txt" "_site/$old/draft-steele-oauth-$old.txt"
 
       - name: Upload Pages site
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

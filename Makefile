@@ -1,3 +1,3 @@
 .PHONY: all
 all:
-	$(MAKE) -C account-bound-agent-delegation
+	$(MAKE) -C delegated-operation-grant

@@ -5,7 +5,7 @@ text changes. Explain how a change affects the platform, workload, authorization
 or resource server. For changes to enforcement, include an example of a
 request that should pass and one that should fail.
 
-Edit the [Markdown source](draft-steele-oauth-account-bound-agent-delegation.md)
+Edit the [Markdown source](draft-steele-oauth-delegated-operation-grant.md)
 and run `make` before requesting review. Do not commit rendered files, secrets,
 or nonpublic examples that cannot travel with the draft.
 

@@ -1,7 +1,7 @@
 ---
 title: "OAuth 2.0 Delegated Operation Grant (DOG)"
 abbrev: "Delegated Operation Grant"
-docname: draft-steele-oauth-account-bound-agent-delegation-latest
+docname: draft-steele-oauth-delegated-operation-grant-latest
 date:
 v: 3
 category: std

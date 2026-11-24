@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Delegated Operation Grant</title>
+<script>
+  const fragment = location.hash === "#name-requesting-runtime-access"
+    ? "#name-requesting-workload-access" : location.hash;
+  location.replace("../delegated-operation-grant/" + fragment);
+</script>
+<noscript><meta http-equiv="refresh" content="0;url=../delegated-operation-grant/"></noscript>
+<a href="../delegated-operation-grant/">Read the Delegated Operation Grant</a>
+</html>

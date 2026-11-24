@@ -1,6 +1,6 @@
 # Design decisions
 
-The [editor's draft](draft-steele-oauth-account-bound-agent-delegation.md)
+The [editor's draft](draft-steele-oauth-delegated-operation-grant.md)
 defines the OAuth 2.0 Delegated Operation Grant (DOG).
 
 - The user's authorization and the device or platform identity evidence
