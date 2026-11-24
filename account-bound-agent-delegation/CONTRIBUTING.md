@@ -1,7 +1,7 @@
 # Contributing
 
 Use an issue for protocol design questions and a pull request for proposed
-text changes. Explain how a change affects the broker, authorization server,
+text changes. Explain how a change affects the platform, runtime, authorization server,
 or resource server. For changes to enforcement, include an example of a
 request that should pass and one that should fail.
 

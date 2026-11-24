@@ -1,14 +1,15 @@
 # Design decisions
 
-This log summarizes the current [editor's draft](draft-steele-oauth-account-bound-agent-delegation.md).
-It does not add requirements.
+The [editor's draft](draft-steele-oauth-account-bound-agent-delegation.md)
+defines the OAuth 2.0 Delegated Operation Grant (DOG).
 
-- **Keep the account grant in the broker.** The agent proposes a task; the
-  broker holds the account grant and calls the service with a restricted token.
-- **Use the same authorization server and presenter in the baseline.** This
-  avoids inventing a token format or requiring support for cross-issuer
-  exchange or for handing a token to an executor with a different key.
-- **Treat action approval separately.** Key possession alone does not approve
-  a cancellation, bind its terms, or make it single-use.
-- **Make unlinking effective for new issuance.** A previously issued token
-  can remain usable until expiry unless the service checks current authority.
+- The user's authorization and the device or platform identity evidence
+  must refer to the same transaction.
+- The platform holds the signed grant and its proof key. The runtime
+  requests access through the platform.
+- The service enforces the grant and any narrower limits on the resulting
+  session or access token. Platform key binding does not carry over automatically.
+- Runtime access protocols are out of scope. A Workload Authorization
+  Grant is one possible way to identify a remote workload.
+- Revocation stops new issuance. Earlier cutoff of existing access requires
+  enforcement at the service.
