@@ -1,4 +1,4 @@
-# Account-Linked Delegation for OAuth 2.0 Agents
+# OAuth 2.0 Delegated Operation Grant (DOG)
 
 This is the private working area for an individual Internet-Draft proposal.
 It has not been submitted to the IETF.
