@@ -35,7 +35,7 @@ jobs:
         with:
           name: editor-copy
           path: |
-            draft-*.html
-            draft-*.txt
+            account-bound-agent-delegation/draft-*.html
+            account-bound-agent-delegation/draft-*.txt
           if-no-files-found: error
           retention-days: 14

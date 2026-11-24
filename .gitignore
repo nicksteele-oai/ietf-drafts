@@ -1,10 +1,1 @@
-/lib/
-/lib.tmp.*/
-/.refcache/
-/.targets.mk
-/.note.xml
 /.venv/
-/draft-*.xml
-/draft-*.html
-/draft-*.txt
-/draft-*.pdf
