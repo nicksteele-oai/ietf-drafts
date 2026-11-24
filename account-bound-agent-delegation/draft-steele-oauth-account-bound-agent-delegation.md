@@ -31,7 +31,18 @@ informative:
 
 --- abstract
 
-A person can let an agent read orders on an existing service account without giving the agent the ability to sign in or cancel an order. This document profiles OAuth 2.0 for that pattern. A trusted platform broker retains a revocable account grant and exchanges it for short-lived, sender-constrained access tokens for a specified resource and operation. The service enforces the resulting authority. This profile defines no new token format.
+This document proposes an OAuth 2.0 authorization grant that lets a trusted
+platform obtain access to a user's service account on behalf of an agent
+running in a less trusted environment, such as a cloud browser.
+
+With the user's consent, the platform requests a signed JSON Web Token
+(JWT) that binds the delegated authority to the user's account, the intended
+service, and the platform's public key. To redeem the grant, the
+platform proves possession of the corresponding private key. The service
+can then issue an OAuth access token or establish a web session for the agent
+using a session cookie. The platform can request narrower permissions or a
+shorter lifetime for each task. The service enforces these limits without
+giving the agent the grant or the user's sign-in credentials.
 
 --- middle
 
