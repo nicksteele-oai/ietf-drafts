@@ -37,10 +37,10 @@ issues a signed JSON Web Token (JWT) binding the user's authorization to the
 intended service and a key controlled by the trusted platform.
 
 The platform stores the grant and can use it to authorize a web session for
-an agent's cloud browser or an access token for a remote workload. It can
+an agent's cloud browser or an access token for a remote API client. It can
 limit the operations and lifetime of either form of access for each task.
 This document specifies the grant and its validation requirements. The
-protocols for establishing runtime access are outside its scope.
+protocols by which workloads obtain access are outside its scope.
 
 --- middle
 
@@ -52,9 +52,10 @@ merchant honor the user's decision without giving the browser the user's
 password or a copy of the user's signed-in session?
 
 The trusted platform is the OAuth client that requests and holds the
-Delegated Operation Grant. The runtime is the environment in which the agent
-performs a task. The platform vouches for a particular request from that
-runtime. The service decides whether to allow the request and enforces the
+Delegated Operation Grant. A workload is an instance of software that performs
+a task for the agent, such as a cloud browser or a remote API client.
+The platform vouches for a particular request from that workload.
+The service decides whether to allow the request and enforces the
 resulting limits. The grant stays on the platform.
 
 {::boilerplate bcp14-tagged}
@@ -96,13 +97,13 @@ MUST contain the following claims.
 * `exp` sets the latest time at which the grant can be used.
 * `jti` identifies this grant instance for revocation.
 
-The platform MUST protect the DOG and its private key from the runtime.
+The platform MUST protect the DOG and its private key from the workload.
 It MUST select the grant from authenticated user and tenant context and
-reject ambiguous matches. The runtime cannot select another user's grant.
+reject ambiguous matches. The workload cannot select another user's grant.
 
-# Requesting Runtime Access
+# Requesting Workload Access
 
-A runtime requests access for a task through the platform. The platform
+A workload requests access for a task through the platform. The platform
 checks the request against the user's task and current policy. It MAY
 request fewer operations or a shorter lifetime than the DOG allows.
 
@@ -110,7 +111,7 @@ Before granting access, the service MUST validate the signature, issuer,
 audience, required claims, expiry, and revocation status. It MUST apply
 validation rules that distinguish a DOG from other JWTs ({{RFC8725}}).
 It MUST verify fresh proof of possession of the platform key. The proof MUST
-cover this grant, the intended runtime, and the requested limits. The service MUST
+cover this grant, the intended workload, and the requested limits. The service MUST
 reject a replayed proof or a request whose limits it cannot enforce.
 
 The service MUST limit access to the named user and to operations allowed
@@ -120,11 +121,11 @@ Renewal MUST preserve these limits and requires a current authorization
 decision. The service MUST NOT accept the DOG itself as an API access token.
 
 For example, a merchant can establish a new session for the cloud browser
-using a session cookie, or issue an OAuth access token for a remote workload.
-With only `orders.read` authorized, the merchant allows either runtime to
+using a session cookie, or issue an OAuth access token for a remote API client.
+With only `orders.read` authorized, the merchant allows either workload to
 read the user's orders and rejects cancellation, even through the website.
 
-The proof format, runtime identification, and delivery of the session or
+The proof format, workload identification, and delivery of the session or
 token are outside this document's scope. A Workload Authorization Grant
 ({{I-D.carleton-workload-authz-grant}}) could identify the remote workload
 to an authorization server. A deployment combining the grants would need
@@ -133,7 +134,7 @@ to tie that workload to the platform's request under the user's DOG.
 # Security and Privacy Considerations
 
 Binding the DOG to the platform key does not bind a resulting session cookie
-or access token to the runtime. A stolen bearer credential can be used
+or access token to the workload. A stolen bearer credential can be used
 within its limits. The service MUST enforce those limits on each operation,
 including any operation that could create a more privileged session.
 
